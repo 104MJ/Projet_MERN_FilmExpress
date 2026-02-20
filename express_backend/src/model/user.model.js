@@ -20,7 +20,14 @@ const userSchema = new mongoose.Schema(
       trim: true,
       match: [/^\S+@\S+\.\S+$/, "Email invalide"],
     },
+    password: {
+      type: String,
+      required: [true, "Le mot de passe est requis"],
+      minlength: [6, "Le mot de passe doit contenir au moins 6 caractères"],
+      select: false, // Ne pas renvoyer le mdp par défaut
+    },
     telephone: {
+
       type: String,
       match: [/^[0-9]{10}$/, "Le téléphone doit contenir 10 chiffres"],
     },

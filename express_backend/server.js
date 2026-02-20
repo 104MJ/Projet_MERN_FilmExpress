@@ -8,6 +8,13 @@ import connectDb from "./src/config/database.js";
 // Import des Routeurs
 import user_router from "./src/routes/user.route.js";
 import movie_router from "./src/routes/movie.route.js";
+import auth_router from "./src/routes/auth.route.js";
+import cart_router from "./src/routes/cart.route.js";
+import order_router from "./src/routes/order.route.js";
+
+
+
+
 // 1. Configuration dotenv
 dotenv.config({ path: "./.env" });
 
@@ -46,6 +53,13 @@ try {
 // 5. Déclaration des Routes
 app.use("/api/users", user_router);
 app.use("/api/movies", movie_router);
+app.use("/api/auth", auth_router);
+app.use("/api/cart", cart_router);
+app.use("/api/orders", order_router);
+
+
+
+
 
 // Route d'accueil (Health Check)
 app.get("/", (req, res) => {

@@ -1,9 +1,9 @@
 import express from "express";
 import UserController from "../controller/user.controller.js";
-import cart_router from "./cart.route.js";
+
 const user_router = express.Router();
 
-user_router.use("/:idUser/cart", cart_router);
+
 user_router.get("/router", (req, res) => {
   res.send("router is working");
 });
