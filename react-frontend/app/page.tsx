@@ -1,11 +1,10 @@
 import Image from "next/image";
-import accueilPage from "./components/AccueilPage";
+import AccueilPage from "./accueil/page";
 
 export default function Home() {
   return (
     <div>
-      <h1>Bienvenue sur FilmExpress</h1>
-      <accueilPage></accueilPage>
+      <AccueilPage />
     </div>
   );
 }
