@@ -4,77 +4,64 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import UserModel from "../model/user.model.js";
 
-// Ici c'est le cerveau de la connexion et de l'inscription !
+// Inscription et Connexion
 class AuthController {
 
-    // Pour s'inscrire au club "Film Express"
+    // Nouveau compte
     static async register(req, res) {
         try {
-            const { password, ...userData } = req.body;
+            const { password, ...infos } = req.body;
 
-            // Vérifie si l'email existe déjà.
-            const existingUser = await UserModel.findOne({ email: userData.email });
-            if (existingUser) {
-                return ApiResponse.badRequest(res, "Désolé, cet email est déjà pris !");
+            const dejaLa = await UserModel.findOne({ email: infos.email });
+            if (dejaLa) {
+                return ApiResponse.error(res, "Désolé, l'email existe déjà !", null, 400);
             }
 
-            // Étape super importante : On ne stocke JAMAIS le mdp en clair.
             const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
+            const mdpHache = await bcrypt.hash(password, salt);
 
-            // On crée le nouvel utilisateur avec son mdp tout mélangé
-            const newUser = await UserService.createUser({
-                ...userData,
-                password: hashedPassword,
+            const nouveau = await UserService.createUser({
+                ...infos,
+                password: mdpHache,
             });
 
-            // On cache le mdp mélangé dans la réponse pour faire propre
-            newUser.password = undefined;
-
-            ApiResponse.success(res, "Bienvenue parmi nous ! Inscription réussie.", newUser, 201);
-        } catch (error) {
-            ApiResponse.error(res, "Mince, l'inscription n'a pas marché...", error);
+            nouveau.password = undefined;
+            ApiResponse.success(res, "Bienvenue ! Tu es inscrit.", nouveau, 201);
+        } catch (err) {
+            ApiResponse.error(res, "Erreur pendant l'inscription", err);
         }
     }
 
-    // Pour se connecter et récupérer son badge (token)
+    // Se connecter
     static async login(req, res) {
         try {
             const { email, password } = req.body;
 
-            // On vérifie si tout est rempli
             if (!email || !password) {
-                return ApiResponse.badRequest(res, "Hé, n'oublie pas ton email ou ton mot de passe !");
+                return ApiResponse.error(res, "N'oublie pas l'email et le mot de passe !", null, 400);
             }
 
-            // On va chercher l'utilisateur en base. 
-            // Comme on a mis "select: false" sur le mdp dans le modèle, 
-            // il faut dire "select('+password')" pour le récupérer ici.
-            const user = await UserModel.findOne({ email }).select("+password");
+            const utilisateur = await UserModel.findOne({ email }).select("+password");
 
-            if (!user) {
-                return ApiResponse.unauthorized(res, "Petit problème d'identifiants... vérifie ton email !");
+            if (!utilisateur) {
+                return ApiResponse.error(res, "Email ou mot de passe faux.", null, 401);
             }
 
-            // On compare le mdp en clair qu'il nous donne avec celui mélangé en base
-            const isMatch = await bcrypt.compare(password, user.password);
-            if (!isMatch) {
-                return ApiResponse.unauthorized(res, "Mauvais mot de passe, réessaye !");
+            const motDePasseValide = await bcrypt.compare(password, utilisateur.password);
+            if (!motDePasseValide) {
+                return ApiResponse.error(res, "Email ou mot de passe faux.", null, 401);
             }
 
-            // Si c'est bon, on crée le fameux Token (le badge de 24h)
             const token = jwt.sign(
-                { id: user._id, role: user.role },
-                process.env.JWT_SECRET || "secret_temp_key", // Faudrait changer ça en production ;)
+                { id: utilisateur._id, role: utilisateur.role },
+                process.env.JWT_SECRET || "ma_super_cle_secrete_123",
                 { expiresIn: "24h" }
             );
 
-            // On cache le mdp avant de renvoyer l'utilisateur
-            user.password = undefined;
-
-            ApiResponse.success(res, "Content de te revoir ! Connexion réussie.", { user, token });
-        } catch (error) {
-            ApiResponse.error(res, "Erreur de connexion... bizarre.", error);
+            utilisateur.password = undefined;
+            ApiResponse.success(res, "Salut ! Connexion OK.", { user: utilisateur, token });
+        } catch (err) {
+            ApiResponse.error(res, "Gros bug de connexion", err);
         }
     }
 }

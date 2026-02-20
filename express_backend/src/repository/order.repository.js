@@ -1,17 +1,16 @@
 import OrderModel from "../model/order.model.js";
 
-// Le Repository s'occupe uniquement de parler à la base de données (MongoDB)
+// Ici on enregistre ou on récupère les commandes
 class OrderRepository {
 
-    // Enregistrer une nouvelle commande
-    static async create(orderData) {
-        return await OrderModel.create(orderData);
+    // Créer une commande dans la base
+    static async create(donneesCommande) {
+        return await OrderModel.create(donneesCommande);
     }
 
-    // Chercher toutes les commandes d'un utilisateur
-    static async findByUserId(userId) {
-        // On trie par date : la plus récente en haut
-        return await OrderModel.find({ userId }).sort({ createdAt: -1 });
+    // Voir toutes les commandes d'une personne (de la plus récente à la plus vieille)
+    static async findByUserId(idUtilisateur) {
+        return await OrderModel.find({ userId: idUtilisateur }).sort({ createdAt: -1 });
     }
 }
 

@@ -1,22 +1,28 @@
 import UserRepository from "../repository/user.repository.js";
 
+// Gestion des utilisateurs
 class UserService {
+
   static async getAllUsers() {
     return await UserRepository.findAll();
   }
+
   static async getUserById(id) {
-    const user = await UserRepository.findById(id);
-    if (!user) {
-      throw new Error("User not found");
+    const util = await UserRepository.findById(id);
+    if (!util) {
+      throw new Error("Utilisateur non trouvé");
     }
-    return user;
+    return util;
   }
-  static async createUser(userData) {
-    return await UserRepository.create(userData);
+
+  static async createUser(donnees) {
+    return await UserRepository.create(donnees);
   }
-  static async updateUser(id, userData) {
-    return await UserRepository.update(id, userData);
+
+  static async updateUser(id, donnees) {
+    return await UserRepository.update(id, donnees);
   }
+
   static async deleteUser(id) {
     return await UserRepository.delete(id);
   }

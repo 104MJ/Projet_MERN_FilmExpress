@@ -2,48 +2,48 @@ import OrderRepository from "../repository/order.repository.js";
 import CartService from "./cart.service.js";
 import MovieModel from "../model/movie.model.js";
 
-// Le Service gère la logique métier (le "comment on fait les choses")
+// Logique pour passer les commandes
 class OrderService {
 
-    // La grosse fonction pour passer une commande
-    static async checkout(userId) {
-        // 1. On récupère le panier
-        const cart = await CartService.findByUserId(userId);
+    // On valide le panier et on crée la commande
+    static async checkout(idUtilisateur) {
+        // 1. On récupère le contenu du panier
+        const panier = await CartService.findByUserId(idUtilisateur);
 
-        if (!cart || cart.movies.length === 0) {
-            throw new Error("Hé, ton panier est vide !");
+        if (!panier || panier.movies.length === 0) {
+            throw new Error("Ton panier est vide !");
         }
 
-        // 2. On récupère les vrais prix des films pour éviter la triche
-        const moviesDetails = await MovieModel.find({ _id: { $in: cart.movies } });
+        // 2. On récupère les prix des films en base
+        const detailsFilms = await MovieModel.find({ _id: { $in: panier.movies } });
 
-        let totalPrice = 0;
-        const orderMovies = moviesDetails.map(movie => {
-            totalPrice += movie.prix;
+        let total = 0;
+        const filmsPourCommande = detailsFilms.map(f => {
+            total += f.prix;
             return {
-                movieId: movie._id,
-                titre: movie.titre,
-                prix: movie.prix
+                movieId: f._id,
+                titre: f.titre,
+                prix: f.prix
             };
         });
 
-        // 3. On demande au Repository de sauvegarder ça
-        const newOrder = await OrderRepository.create({
-            userId,
-            movies: orderMovies,
-            totalPrice,
+        // 3. On crée la commande
+        const commande = await OrderRepository.create({
+            userId: idUtilisateur,
+            movies: filmsPourCommande,
+            totalPrice: total,
             status: "completed"
         });
 
-        // 4. Une fois que c'est payé/validé, on vide le panier
-        await CartService.clearCart(userId);
+        // 4. On vide le panier de l'utilisateur
+        await CartService.clearCart(idUtilisateur);
 
-        return newOrder;
+        return commande;
     }
 
-    // Pour voir ses anciennes commandes
-    static async getHistory(userId) {
-        return await OrderRepository.findByUserId(userId);
+    // Historique des commandes
+    static async getHistory(idUtilisateur) {
+        return await OrderRepository.findByUserId(idUtilisateur);
     }
 }
 

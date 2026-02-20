@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import Link from "next/link";
 import "./accueilPage.css";
 
 const AccueilPage = () => {
@@ -12,16 +12,13 @@ const AccueilPage = () => {
           Plongez dans un catalogue de plus de 700 000 films. L'émotion du
           cinéma, directement chez vous.
         </p>
-        <button
-          className="btn-explore"
-          onClick={() => (window.location.href = "/api/register")}
-        >
+        <Link href="/login" className="btn-explore">
           Connectez-vous
-        </button>
-        <br></br>
-        <button onClick={() => (window.location.href = "/api/auth")}>
+        </Link>
+        <br />
+        <Link href="/register" className="mt-4 inline-block text-white hover:underline font-bold">
           Inscrivez-vous
-        </button>
+        </Link>
       </div>
     </div>
   );

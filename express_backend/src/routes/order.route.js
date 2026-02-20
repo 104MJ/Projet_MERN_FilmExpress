@@ -4,8 +4,9 @@ import authMiddleware from "../middleware/auth.middleware.js";
 
 const order_router = express.Router();
 
-order_router.use(authMiddleware); // Protection de toutes les routes
+order_router.use(authMiddleware);
 
+// On appelle les méthodes de la classe OrderController
 order_router.post("/", OrderController.createOrder);
 order_router.get("/", OrderController.getUserOrders);
 

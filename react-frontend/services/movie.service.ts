@@ -1,30 +1,34 @@
-import Movie from "../models/Movie";
-import axios, { AxiosError } from "axios";
+import api from "./api";
 
-// const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:5000/api";
-const API_BASE_URL = "http://localhost:5000/api";
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+// Interface pour le typage (à ajuster si un fichier models/Movie existe déjà)
+interface Movie {
+  _id: string;
+  titre: string;
+  prix: number;
+  realisateur: string;
+  annee: number;
+  genre: string;
+  description: string;
+}
 
 const MovieService = {
-  async getAllMovies(): Promise<ResponseApi<Movie[]>> {
+  async getAllMovies(): Promise<any> {
     try {
-      const response = await api.get<ResponseApi<Movie[]>>("/movies");
+      const response = await api.get("/movies");
       return response.data;
     } catch (error) {
-      if (error instanceof AxiosError) {
-        throw new Error(
-          error.response?.data?.message ||
-            "Erreur lors de la récupération des films",
-        );
-      }
-      throw error;
+      throw new Error("Erreur lors de la récupération des films");
     }
   },
+
+  async getMovieById(id: string): Promise<any> {
+    try {
+      const response = await api.get(`/movies/${id}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération du film");
+    }
+  }
 };
 
 export default MovieService;

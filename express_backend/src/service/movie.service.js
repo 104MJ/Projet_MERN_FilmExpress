@@ -1,22 +1,33 @@
 import MovieRepository from "../repository/movie.repository.js";
 
+// Gestion des films via le repository
 class MovieService {
-  static async getAllMovies() {
-    return await MovieRepository.findAll();
+
+  // Liste des films avec pagination
+  static async getAllMovies(page, limit) {
+    return await MovieRepository.findAll(page, limit);
   }
+
+  // Chercher un film par son ID
   static async getMovieById(id) {
-    const movie = await MovieRepository.findById(id);
-    if (!movie) {
-      throw new Error("Movie not found");
+    const film = await MovieRepository.findById(id);
+    if (!film) {
+      throw new Error("Film non trouvé !");
     }
-    return movie;
+    return film;
   }
-  static async createMovie(movieData) {
-    return await MovieRepository.create(movieData);
+
+  // Créer un film
+  static async createMovie(donnees) {
+    return await MovieRepository.create(donnees);
   }
-  static async updateMovie(id, movieData) {
-    return await MovieRepository.update(id, movieData);
+
+  // Mettre à jour un film
+  static async updateMovie(id, nouvellesDonnees) {
+    return await MovieRepository.update(id, nouvellesDonnees);
   }
+
+  // Supprimer un film
   static async deleteMovie(id) {
     return await MovieRepository.delete(id);
   }

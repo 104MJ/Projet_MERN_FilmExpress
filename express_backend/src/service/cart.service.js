@@ -1,16 +1,26 @@
 import CartRepository from "../repository/cart.repository.js";
+
+// Le service fait le lien entre le contrôleur et les données (repository)
 class CartService {
-  static async findByUserId(userId) {
-    return await CartRepository.findByUserId(userId);
+
+  // Chercher le panier
+  static async findByUserId(idUtilisateur) {
+    return await CartRepository.findByUserId(idUtilisateur);
   }
-  static async addProductToCart(userId, productId) {
-    return await CartRepository.addProductToCart(userId, productId);
+
+  // Ajouter un film
+  static async addProductToCart(idUtilisateur, idFilm) {
+    return await CartRepository.addProductToCart(idUtilisateur, idFilm);
   }
-  static async removeProductFromCart(userId, productId) {
-    return await CartRepository.removeProductFromCart(userId, productId);
+
+  // Retirer un film
+  static async removeProductFromCart(idUtilisateur, idFilm) {
+    return await CartRepository.removeProductFromCart(idUtilisateur, idFilm);
   }
-  static async clearCart(userId) {
-    return await CartRepository.clearCart(userId);
+
+  // Tout effacer
+  static async clearCart(idUtilisateur) {
+    return await CartRepository.clearCart(idUtilisateur);
   }
 }
 

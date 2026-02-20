@@ -3,6 +3,7 @@ import AuthController from "../controller/auth.controller.js";
 
 const auth_router = express.Router();
 
+// Inscription et connexion via la classe AuthController
 auth_router.post("/register", AuthController.register);
 auth_router.post("/login", AuthController.login);
 
