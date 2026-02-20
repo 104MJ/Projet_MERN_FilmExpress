@@ -1,112 +1,152 @@
-.movies-container {
-  padding: 40px;
-  background-color: #121212;
+:root {
+  --primary: #e50914;
+  --bg-dark: #0a0a0a;
+  --card-bg: #141414;
+  --text-main: #ffffff;
+  --text-dim: #a3a3a3;
+}
+
+.movies-page {
+  background-color: var(--bg-dark);
   min-height: 100vh;
-  color: white;
-  font-family: "Segoe UI", sans-serif;
+  padding: 60px 5%;
+  color: var(--text-main);
+  font-family: "Inter", system-ui, sans-serif;
 }
 
-.movies-header {
-  margin-bottom: 40px;
-  border-left: 5px solid #ff4b2b;
-  padding-left: 20px;
+.catalog-header {
+  margin-bottom: 60px;
+  text-align: center;
 }
 
-.movies-header h1 {
-  font-size: 2.5rem;
-  margin: 0;
+.catalog-header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
 }
 
-/* Grille adaptative */
+.highlight {
+  color: var(--primary);
+}
+
 .movies-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 30px;
 }
 
-/* Style des cartes */
 .movie-card {
-  background: #1e1e1e;
-  border-radius: 15px;
+  background: var(--card-bg);
+  border-radius: 16px;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  transition: transform 0.3s ease;
-  border: 1px solid #333;
+  border: 1px solid #262626;
 }
 
 .movie-card:hover {
-  transform: translateY(-10px);
-  border-color: #ff4b2b;
+  transform: scale(1.03);
+  border-color: var(--primary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
-.movie-badge {
+.card-badge {
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #ff4b2b;
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: bold;
+  background: rgba(229, 9, 20, 0.9);
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-.movie-info {
-  padding: 20px;
+.card-content {
+  padding: 28px;
 }
 
-.movie-info h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.3rem;
-  color: #fff;
+.movie-year {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.85rem;
 }
 
-.director {
-  color: #aaa;
+.movie-title {
+  font-size: 1.5rem;
+  margin: 10px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.movie-director {
   font-size: 0.9rem;
+  color: var(--text-dim);
   margin-bottom: 15px;
 }
 
-.description {
-  font-size: 0.85rem;
-  color: #ccc;
-  line-height: 1.4;
-  height: 60px;
+.movie-desc {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  height: 4.8em;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.movie-footer {
+.card-footer {
+  margin-top: 25px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 20px;
-  padding-top: 15px;
-  border-top: 1px solid #333;
 }
 
-.price {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #ff4b2b;
+.movie-price {
+  font-size: 1.6rem;
+  font-weight: 900;
 }
 
-.btn-add {
-  background: transparent;
-  border: 2px solid #ff4b2b;
-  color: #ff4b2b;
-  padding: 8px 15px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.btn-add:hover {
-  background: #ff4b2b;
+.btn-add-cart {
+  background: var(--primary);
   color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-.loader {
-  text-align: center;
-  padding: 100px;
-  font-size: 2rem;
-  color: #ff4b2b;
+.btn-add-cart:hover {
+  background: #b20710;
+}
+
+/* Loader Spinner */
+.loader-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  color: var(--primary);
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
