@@ -3,7 +3,7 @@
 **Membres du groupe :**
 - Aya SGHAIER
 - Jacqueline MAPENZI
-- Danielle jamila KOAGNE NGAKAM
+- Danielle jamila KOAGNE NGANKAM
 
 ---
 
